@@ -13,10 +13,10 @@ export class ApiService {
   getCurrencyConverter(body : Currency){
     var parameters ='';
 		Object.keys(body).forEach((key, i)=>{ (i==0) ? parameters += `?${key}=${(body as any)[key]}` : parameters +=  `&${key}=${(body as any)[key]}`; });
-		return this.app.getCurrencyConverter(`currencyConverter${parameters}`);
+		return this.app.getCurrencyConverter(`currency/currencyConverter${parameters}`);
   }
 
   getCountryName(){
-    return this.app.getCountryName(`countryName`);
+    return this.app.getCountryName(`currency/countryName`);
   }
 }
