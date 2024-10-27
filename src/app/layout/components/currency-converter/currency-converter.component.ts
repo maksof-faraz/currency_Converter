@@ -3,6 +3,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { Currency, CurrencyName, CurrencyType } from '../../../interfaces/currencyInterface';
 import { LoaderService } from 'src/app/services/loader.service';
 import { CommonService } from 'src/app/services/common.service';
+import { formatCurrency } from '@angular/common';
 
 @Component({
   selector: 'app-currency-converter',
@@ -68,6 +69,7 @@ export class CurrencyConverterComponent implements OnInit {
       
     }, (err) => {
        this.loaderService.hide();
+       alert(err.error.error)
     });
   }
   
@@ -80,13 +82,26 @@ export class CurrencyConverterComponent implements OnInit {
       this.api.getCurrencyConverter(this.currencyObj).subscribe(res => {
         if(res.status=="OK") {
           let objData = res.data.data;
+          let itemsArray = [];
           this.loaderService.hide();
-          if(!this.currencyType) this.currencyText = `${this.currencyObj.amount} ${this.currencyObj.base_currency} = ${(res.data.data[this.currencyObj.currencies] * this.currencyObj.amount).toFixed(3)} ${this.currencyObj.currencies}`
-          else this.currencyText = `${this.currencyObj.amount} ${this.currencyObj.base_currency} = ${(res.data.data[Object.keys(objData)[0]][this.currencyObj.currencies] * this.currencyObj.amount).toFixed(3)} ${this.currencyObj.currencies}`
+          const storedItems = localStorage.getItem('myItems');
+          if (storedItems) {
+            itemsArray = JSON.parse(storedItems);
+          }
+          if(!this.currencyType){
+            this.currencyText = `${this.currencyObj.amount} ${this.currencyObj.base_currency} = ${(res.data.data[this.currencyObj.currencies] * this.currencyObj.amount).toFixed(3)} ${this.currencyObj.currencies}`
+            itemsArray.push({fromCurrency : `${this.currencyObj.amount} ${this.currencyObj.base_currency}` , toCurrency : `${(res.data.data[this.currencyObj.currencies] * this.currencyObj.amount).toFixed(3)} ${this.currencyObj.currencies}` , time : new Date().toLocaleString() , historicalDate : 'Latest' })
+          }  else {
+            this.currencyText = `${this.currencyObj.amount} ${this.currencyObj.base_currency} = ${(res.data.data[Object.keys(objData)[0]][this.currencyObj.currencies] * this.currencyObj.amount).toFixed(3)} ${this.currencyObj.currencies}`
+            itemsArray.push({fromCurrency : `${this.currencyObj.amount} ${this.currencyObj.base_currency}` , toCurrency : `${(res.data.data[Object.keys(objData)[0]][this.currencyObj.currencies] * this.currencyObj.amount).toFixed(3)} ${this.currencyObj.currencies}` , time : new Date().toLocaleString() ,  historicalDate : Object.keys(objData)[0]})
+          }
+          localStorage.setItem('myItems',JSON.stringify(itemsArray))
         }
         
       }, (err) => {
          this.loaderService.hide();
+         alert(err.error.error);
+         
       });
 
     } else {
@@ -109,7 +124,4 @@ export class CurrencyConverterComponent implements OnInit {
   
   }
 
-  check(){
-    this.currencyText='';
-  }
 }

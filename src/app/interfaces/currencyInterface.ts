@@ -11,6 +11,14 @@ export enum CurrencyType {
     date?: Date | string ;
   }
 
+  export interface CurrencyList {
+    fromCurrency : string
+    toCurrency: string;
+    time: string;
+    historicalDate: string;
+   
+  }
+
   export interface CurrencyName {
     value :  string,
     viewValue:  string
