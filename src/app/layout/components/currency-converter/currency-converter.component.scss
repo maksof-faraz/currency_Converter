@@ -1,0 +1,43 @@
+.container {
+    .container-header{
+        display: flex;
+        justify-content: space-between;
+        .slide-toggle {
+            margin-top: -10px;
+            span {
+                font-size: 17px;
+                font-weight: bold;
+                color: #ffa500;
+                &:last-child {
+                    color: #E75300;
+                }
+            }
+        }
+    }
+    max-width: 600px;  
+    background-color: white; 
+    border-radius: 10px;      /* Maximum width for the form */
+    margin: 0 auto;           /* Center the form */
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    .paraText{
+        text-align: center;
+        background-color: #ffa500;
+        color: white;
+        font-size: 15px;
+        line-height: 40px;
+    }
+}
+
+
+mat-form-field {
+    width: 100%;
+    margin-bottom: 8px
+}
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+}
